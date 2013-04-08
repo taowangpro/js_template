@@ -1,2 +1,12 @@
-jformval 1.0
+are you using understore backbone?
+do you feel _.template() very limited?
+Yes, I am.
+Do i make this SEL.template, extend the functionality and work with a few more cases
+
+ {{ var }}
+ {{ var.key1.0 }}
+ {{ var1 || var2 || "constant" }}
+ {{ var ? var1 : "constant" }}
+ {{ var:for }} .... {{ var:forend }}
+
 
