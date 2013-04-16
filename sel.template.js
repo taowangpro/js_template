@@ -7,7 +7,7 @@ window.SEL || (window.SEL = {});
  * {{ var ? var1 : "constant" }}
  * {{ var | time }}	// support time, date, datetime
  * 
- * {{ var:for }} .... {{ var:forend }}
+ * {{ var:for }} ... {{ var:forelse }} ... {{ var:forend }}
  */
 SEL.template = (function(){
 	// since RE pair match not support nest , workaround varname:for .... varname:forend
@@ -35,24 +35,47 @@ SEL.template = (function(){
 	var fnPipe = {
 		"time": function(ts) {
 			var time = new Date(ts);
-            return time.getHours() + ":" + time.getMinutes();
+			return time.getHours() + ":" + time.getMinutes();
 		},
 		"date": function(ts) {
 			return new Date(ts).toLocaleDateString();
 		},
 		"datetime": function(ts) {
 			var time = new Date(ts);
-            return fnPipe.date(time) + " " + fnPipe.time(time);
+			return fnPipe.date(time) + " " + fnPipe.time(time);
+		},
+		"round": function(num, decimal) {
+		    return Math.round(num * Math.pow(10, decimal)) / Math.pow(10, decimal);
+		},
+		"deg": function(dec) {
+			return (dec+'').replace(/(\d+)\.\d+/, function(a,b){
+				return b + '&#176;' + (Math.round((a-b)*60000)).toString().replace(/(\d{2})/, '$1.') 
+			}); 
 		}
+		
 	}
 	
 	var render = function(tpl, hashVar){
 		var match;
 		if (match = tpl.match(forRE)) {
-			var loopTpl =  match[2];
-			var loop = $.map(hashVar[match[1]] || [], function(va, ix){
-				return render(loopTpl, va);
-			}).join("");
+			var loopTpl = match[2], elseTpl;
+
+			var forElseRE = new RegExp("\{\{\s*" + match[1] + ":forelse\s*\}\}");
+			var tpl2 = loopTpl.split(forElseRE);
+			if (tpl2.length > 1) {
+				loopTpl = tpl2[0];
+				elseTpl = tpl2[1];
+			}
+
+			var loopVar = hashVar[match[1]], loop = "";
+			
+			if (loopVar && loopVar.length) {
+				loop = $.map(loopVar, function(va, ix){
+					return render(loopTpl, va);
+				}).join("");
+			} else if (elseTpl) {
+				loop =  render(elseTpl, hashVar);
+			}
 			
 			return render(tpl.replace(match[0], loop), hashVar);
 			
