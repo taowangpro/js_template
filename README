@@ -1,12 +1,48 @@
-are you using understore backbone?
-do you feel _.template() very limited?
+Are you using understore with backbone?
+Do you feel _.template() very limited?
 Yes, I am.
-Do i make this SEL.template, extend the functionality and work with a few more cases
+So I made this SEL.template, which is has a few extended the functionality
 
- {{ var }}
- {{ var.key1.0 }}
- {{ var1 || var2 || "constant" }}
- {{ var ? var1 : "constant" }}
- {{ var:for }} .... {{ var:forend }}
+{{ var }}
+{{ var.key1.0 }}
+{{ var1 || var2 || "constant" }}
+{{ var ? var1 : "constant" }}
+{{ var:for }} ... {{ var:forelse }} ... {{ var:forend }}
+
+For example
+
+##### when jquery, SEL.template avaiable and following all availible in the dom
+<script type="text/template" id="demo-tpl">
+	Here is the simple {{ var1 }} case. Then value self can be hash or {{ var2.key1.0 }}. 
+	The first truthy value can be {{ var3 || var4 }}, or give some {{ var3 || "default" }}
+	It is also possilbe display {{ var5 ? var6 : "conditionally"}}. Loop all the author
+	{{ authors:for}} Name:{{ name }}, email: {{email}} {{ authors:forend}}, and todo: 
+	{{ todo:for }} {{ content }} {{ todo:forelse }} Unless having requirement, I like keep thing simple {{todo:forend}}
+</script>
+
+###### then, run js 
+var tpl = SEL.template($("#demo-tpl").html());
+tpl({
+	"var1": "name/value pair",
+	"var2": {"key1": ["map"] },
+	"var4": "from variable",
+	"var6": "depending on var5",
+	"authors": [{"name": "Tao Wang", "email": "tao.wang.pro@gmail.com"}],
+	"todo": []
+});
+
+#### result
+"
+	Here is the simple name/value pair case. Then value self can be hash or map. 
+	The first truthy value can be from variable, or give some default
+	It is also possilbe display conditionally. Loop all the author
+	 Name:Tao Wang, email: tao.wang.pro@gmail.com , and todo: 
+	 Unless having requirement, I like keep thing simple 
+"
+
+
+
+###### result
+
 
 

@@ -5,8 +5,6 @@ window.SEL || (window.SEL = {});
  * {{ var.key1.key }}
  * {{ var1 || var2 || "constant" }}
  * {{ var ? var1 : "constant" }}
- * {{ var | time }}	// support time, date, datetime
- * 
  * {{ var:for }} ... {{ var:forelse }} ... {{ var:forend }}
  */
 SEL.template = (function(){
@@ -32,35 +30,12 @@ SEL.template = (function(){
 		} 
 	};
 	
-	var fnPipe = {
-		"time": function(ts) {
-			var time = new Date(ts);
-			return time.getHours() + ":" + time.getMinutes();
-		},
-		"date": function(ts) {
-			return new Date(ts).toLocaleDateString();
-		},
-		"datetime": function(ts) {
-			var time = new Date(ts);
-			return fnPipe.date(time) + " " + fnPipe.time(time);
-		},
-		"round": function(num, decimal) {
-		    return Math.round(num * Math.pow(10, decimal)) / Math.pow(10, decimal);
-		},
-		"deg": function(dec) {
-			return (dec+'').replace(/(\d+)\.\d+/, function(a,b){
-				return b + '&#176;' + (Math.round((a-b)*60000)).toString().replace(/(\d{2})/, '$1.') 
-			}); 
-		}
-		
-	}
-	
 	var render = function(tpl, hashVar){
 		var match;
 		if (match = tpl.match(forRE)) {
 			var loopTpl = match[2], elseTpl;
 
-			var forElseRE = new RegExp("\{\{\s*" + match[1] + ":forelse\s*\}\}");
+			var forElseRE = new RegExp("\\{\\{\\s*" + match[1] + ":forelse\\s*\\}\\}");
 			var tpl2 = loopTpl.split(forElseRE);
 			if (tpl2.length > 1) {
 				loopTpl = tpl2[0];
@@ -104,7 +79,6 @@ SEL.template = (function(){
 				} else {
 					place = fnDecide(va, hashVar);
 				}
-				
 				
 				// never ever spit out 
 				return (place === undefined || place === null) ? "" : place;
