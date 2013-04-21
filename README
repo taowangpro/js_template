@@ -1,7 +1,7 @@
 Are you using understore with backbone?
 Do you feel _.template() very limited?
 Yes, I am.
-So I made this SEL.template, which is has a few extended the functionality
+So I made this SEL.template, which has a few extended the functionality commonly seen in template engine.
 
 {{ var }}
 {{ var.key1.0 }}
