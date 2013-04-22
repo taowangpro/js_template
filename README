@@ -1,7 +1,6 @@
 Are you using understore with backbone?
-Do you feel _.template() very limited?
-Yes, I am.
-So I made this SEL.template, which has a few extended the functionality commonly seen in template engine.
+Do you feel _.template() too limited and want to extend understore template to have a bit of functionality commonly seen in template engine?
+Here is what I did, support the following tag:
 
 {{ var }}
 {{ var.key1.0 }}
@@ -9,8 +8,9 @@ So I made this SEL.template, which has a few extended the functionality commonly
 {{ var ? var1 : "constant" }}
 {{ var:for }} ... {{ var:forelse }} ... {{ var:forend }}
 
-For example
+Yes, it is still not comprehensive, not configurable either. But, meet my needs. Unless furthur interests, I keep it simple
 
+For example
 ##### when jquery, SEL.template avaiable and following all availible in the dom
 <script type="text/template" id="demo-tpl">
 	Here is the simple {{ var1 }} case. Then value self can be hash or {{ var2.key1.0 }}. 
@@ -39,10 +39,3 @@ tpl({
 	 Name:Tao Wang, email: tao.wang.pro@gmail.com , and todo: 
 	 Unless having requirement, I like keep thing simple 
 "
-
-
-
-###### result
-
-
-
